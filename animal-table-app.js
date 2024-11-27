@@ -64,7 +64,12 @@ class AnimalTableUI {
 
     init() {
         const addBtn = document.getElementById(`add-${this.tableId}-btn`);
-        addBtn.addEventListener('click', () => this.addAnimalPrompt());
+        addBtn.addEventListener('click', () => {
+            const that = this;
+            this.addAnimalPrompt(() => {
+                that.animalTable.species;
+            });
+        });
         this.renderTable();
     }
 
