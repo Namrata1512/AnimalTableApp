@@ -9,8 +9,13 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
 
+    # Add required permissions
+    permissions:
+      id-token: write
+      contents: read
+
     steps:
-      # Step 1: Checkout the repository
+      # Step 1: Checkout repository
       - name: Checkout repository
         uses: actions/checkout@v3
 
