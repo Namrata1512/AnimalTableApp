@@ -9,13 +9,12 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
 
-    # Add required permissions
     permissions:
       id-token: write
       contents: read
 
     steps:
-      # Step 1: Checkout repository
+      # Step 1: Checkout the repository
       - name: Checkout repository
         uses: actions/checkout@v3
 
@@ -23,7 +22,7 @@ jobs:
       - name: Upload artifact for deployment
         uses: actions/upload-pages-artifact@v1
         with:
-          path: ./ # Adjust if your files are in a subdirectory
+          path: ./dist
 
       # Step 3: Deploy to GitHub Pages
       - name: Deploy to GitHub Pages
