@@ -1,0 +1,45 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Build 1 
+        run: |
+          mkdir docs
+          cp index.html docs/
+          cp animal-table-app.js docs/
+
+  report-build-status:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Report build status
+        uses: actions/github-script@v6
+        with:
+          script: |
+            github.checkRun.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              name: 'Build Status',
+              head_sha: context.sha,
+              status: 'completed',
+              conclusion: 'success',
+              output: {
+                title: 'Build Successful',
+                summary: 'The build completed successfully.'
+              }
+            })
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v4
