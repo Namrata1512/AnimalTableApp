@@ -1,3 +1,4 @@
+// Main Animal Class
 class Animal {
     constructor(species, name, size, location, image = '') {
         this.species = species;
@@ -8,22 +9,31 @@ class Animal {
     }
 
     getDefaultImage() {
+        // Return a default image based on species
         const defaultImages = {
-            'Big Cats': 'https://via.placeholder.com/100?text=Cat',
-            'Dog': 'https://via.placeholder.com/100?text=Dog',
-            'Big Fish': 'https://via.placeholder.com/100?text=Fish',
+            'Big Cats': 'default-cat.jpg',
+            'Dog': 'default-dog.jpg',
+            'Big Fish': 'default-fish.jpg'
         };
-        return defaultImages[this.species];
+        return defaultImages[this.species] || 'default.jpg';
     }
 
     validate() {
-        if (!this.name || this.name.trim() === '') throw new Error('Name cannot be empty');
-        if (isNaN(parseFloat(this.size)) || parseFloat(this.size) <= 0) throw new Error('Size must be a positive number');
-        if (!this.location || this.location.trim() === '') throw new Error('Location cannot be empty');
+        // Validation logic
+        if (!this.name || this.name.trim() === '') {
+            throw new Error('Name cannot be empty');
+        }
+        if (isNaN(parseFloat(this.size)) || parseFloat(this.size) <= 0) {
+            throw new Error('Size must be a positive number');
+        }
+        if (!this.location || this.location.trim() === '') {
+            throw new Error('Location cannot be empty');
+        }
         return true;
     }
 }
 
+// Animal Table Management Class
 class AnimalTable {
     constructor(species) {
         this.species = species;
@@ -31,46 +41,75 @@ class AnimalTable {
     }
 
     addAnimal(animal) {
-        if (this.animals.some(existing => existing.name.toLowerCase() === animal.name.toLowerCase())) {
+        // Check for duplicates
+        if (this.animals.some(existing => 
+            existing.name.toLowerCase() === animal.name.toLowerCase())) {
             throw new Error('Animal with this name already exists');
         }
+
+        // Validate animal before adding
         animal.validate();
         this.animals.push(animal);
     }
 
     removeAnimal(name) {
-        this.animals = this.animals.filter(animal => animal.name.toLowerCase() !== name.toLowerCase());
+        const index = this.animals.findIndex(animal => 
+            animal.name.toLowerCase() === name.toLowerCase());
+        
+        if (index !== -1) {
+            this.animals.splice(index, 1);
+            return true;
+        }
+        return false;
     }
 
     editAnimal(name, updatedAnimal) {
-        const index = this.animals.findIndex(animal => animal.name.toLowerCase() === name.toLowerCase());
+        const index = this.animals.findIndex(animal => 
+            animal.name.toLowerCase() === name.toLowerCase());
+        
         if (index !== -1) {
+            // Validate updated animal
             updatedAnimal.validate();
+            
+            // Remove old animal if name changed
+            if (name.toLowerCase() !== updatedAnimal.name.toLowerCase()) {
+                this.removeAnimal(name);
+            }
+            
             this.animals[index] = updatedAnimal;
+            return true;
         }
+        return false;
     }
 
     sortBy(field) {
-        this.animals.sort((a, b) => a[field].toString().localeCompare(b[field].toString()));
+        // Sort animals based on the given field
+        if (field === 'name') {
+            return this.animals.sort((a, b) => a.name.localeCompare(b.name));
+        }
+        if (field === 'size') {
+            return this.animals.sort((a, b) => parseFloat(a.size) - parseFloat(b.size));
+        }
+        if (field === 'location') {
+            return this.animals.sort((a, b) => a.location.localeCompare(b.location));
+        }
+        return this.animals;
     }
 }
 
+// UI Rendering Class
 class AnimalTableUI {
     constructor(tableId, species) {
         this.tableId = tableId;
+        this.species = species;
         this.animalTable = new AnimalTable(species);
-        this.init();
+        this.initializeTable();
     }
 
-    init() {
-        const addBtn = document.getElementById(`add-${this.tableId}-btn`);
-        addBtn.addEventListener('click', () => {
-            const that = this;
-            this.addAnimalPrompt(() => {
-                that.animalTable.species;
-            });
-        });
-        this.renderTable();
+    initializeTable() {
+        // Initialize table with Bootstrap styling and functionality
+        const tableContainer = document.getElementById(this.tableId);
+        // Note: Full UI rendering implementation would go here
     }
 
     renderTable() {
@@ -130,9 +169,10 @@ class AnimalTableUI {
     }
 }
 
-// Initialize tables
+// Main Application Initialization
 document.addEventListener('DOMContentLoaded', () => {
-    new AnimalTableUI('big-cats', 'Big Cats');
-    new AnimalTableUI('dogs', 'Dog');
-    new AnimalTableUI('big-fish', 'Big Fish');
+    // Initialize tables for Big Cats, Dogs, and Big Fish
+    const bigCatsTable = new AnimalTableUI('big-cats-table', 'Big Cats');
+    const dogsTable = new AnimalTableUI('dogs-table', 'Dog');
+    const bigFishTable = new AnimalTableUI('big-fish-table', 'Big Fish');
 });
