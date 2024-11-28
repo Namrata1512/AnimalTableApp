@@ -1,7 +1,6 @@
 # Animal Tables Web Application
 
-## Project Overview
-This web application is a solution for the IIT Bombay JavaScript Web Programmer position interview challenge. The application manages three tables of animals (Big Cats, Dogs, and Big Fish) with full CRUD (Create, Read, Update, Delete) functionality.
+This project implements a web application that displays animal information in three interactive tables. Each table has features like sorting, adding, deleting, and editing animals.
 
 ## Design Approach
 
@@ -76,6 +75,3 @@ This web application is a solution for the IIT Bombay JavaScript Web Programmer 
 - Firefox
 - Safari
 - Edge
-
-## Plagiarism Note
-This solution is original work, developed specifically for the IIT Bombay interview challenge.
