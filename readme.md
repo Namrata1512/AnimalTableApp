@@ -58,12 +58,6 @@ This project implements a web application that displays animal information in th
 - Enhance image upload capabilities
 - Create more comprehensive error handling
 
-## Submission Details
-- Completed within the specified 3-day timeframe
-- Follows all provided guidelines
-- Uses object-oriented programming
-- Responsive and intuitive design
-
 ## Technologies Used
 - HTML5
 - CSS3
