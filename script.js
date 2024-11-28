@@ -20,24 +20,35 @@ class TableManager {
 
     renderTable() {
         const tableBody = document.getElementById(this.tableId);
-        tableBody.innerHTML = this.animals
-            .map(
-                (animal) => `
-                <tr>
-                    <td><img src="${animal.image}" alt="${animal.name}"></td>
-                    <td>${this.formatName(animal.name)}</td>
-                    <td>${animal.size}</td>
-                    <td>${animal.location}</td>
-                    <td>
-                        <button class="btn btn-warning btn-sm" onclick="openAnimalModal('${this.tableId}', 'edit', '${animal.name}')" 
-                            title="Edit Animal">Edit</button>
-                        <button class="btn btn-danger btn-sm" onclick="deleteAnimal('${this.tableId}', '${animal.name}')" 
-                            title="Delete Animal">Delete</button>
-                    </td>
-                </tr>`
-            )
-            .join('');
-    }
+        
+        // Clear the table body before adding new rows
+        tableBody.innerHTML = ''; 
+    
+        this.animals.forEach(animal => {
+            const row = document.createElement('tr');
+            
+            // Create image element with a random query parameter to avoid caching
+            const imageSrc = `${animal.image}?v=${new Date().getTime()}`; // Adding timestamp to prevent caching
+            const imageCell = `<td><img src="${imageSrc}" alt="${animal.name}" width="50" height="50"></td>`;
+    
+            // Construct the rest of the table row content
+            const rowContent = `
+                ${imageCell}
+                <td>${this.formatName(animal.name)}</td>
+                <td>${animal.size}</td>
+                <td>${animal.location}</td>
+                <td>
+                    <button class="btn btn-warning btn-sm" onclick="openAnimalModal('${this.tableId}', 'edit', '${animal.name}')" 
+                        title="Edit Animal">Edit</button>
+                    <button class="btn btn-danger btn-sm" onclick="deleteAnimal('${this.tableId}', '${animal.name}')" 
+                        title="Delete Animal">Delete</button>
+                </td>
+            `;
+    
+            row.innerHTML = rowContent;
+            tableBody.appendChild(row); // Append the new row to the table
+        });
+    }    
 
     formatName(name) {
         if (this.tableId === 'table2') {
@@ -169,16 +180,21 @@ function openAnimalModal(tableId, operation, animalName = null) {
 
 document.getElementById("animalForm").addEventListener("submit", function (event) {
     event.preventDefault();
+
+    const modalElement = document.getElementById("animalModal");
     const tableId = modalElement.getAttribute("data-table-id");
     const operation = modalElement.getAttribute("data-operation");
+
     const name = document.getElementById("animalName").value.trim();
     const size = document.getElementById("animalSize").value.trim();
     const location = document.getElementById("animalLocation").value.trim();
     const image = document.getElementById("animalImage").value.trim() || "default.jpg";
+    // Debugging: Check if the image input value is correct
+    console.log("Image from input: ", image);  // Check what image URL is being submitted
 
     let isValid = true;
 
-    // Validation
+    // Name validation
     if (!name || name.length < 3) {
         isValid = false;
         document.getElementById("nameError").textContent = "Name must be at least 3 characters long.";
@@ -188,15 +204,17 @@ document.getElementById("animalForm").addEventListener("submit", function (event
         document.getElementById("animalName").classList.remove("is-invalid");
     }
 
-    if (!size || size !== 0) {
+    // Size validation
+    if (!size || isNaN(size) || Number(size) <= 0) {
         isValid = false;
-        document.getElementById("sizeError").textContent = "Please provide a valid size.";
+        document.getElementById("sizeError").textContent = "Please provide a valid size (positive number).";
         document.getElementById("animalSize").classList.add("is-invalid");
     } else {
         document.getElementById("sizeError").textContent = "";
         document.getElementById("animalSize").classList.remove("is-invalid");
     }
 
+    // Location validation
     if (!location) {
         isValid = false;
         document.getElementById("locationError").textContent = "Location is required.";
@@ -214,18 +232,13 @@ document.getElementById("animalForm").addEventListener("submit", function (event
         // Call editAnimal with individual fields
         tableManagers[tableId].editAnimal(originalName, name, size, location, image);
     } else {
-        const newAnimal = new Animal(
-            tableManagers[tableId].animals[0]?.species || "Unknown",  // Default species if none available
-            name,
-            size,
-            location,
-            image
-        );
+        const species = tableManagers[tableId].animals[0]?.species || "New Species";
+        const newAnimal = new Animal(species, name, size, location, image);
         tableManagers[tableId].addAnimal(newAnimal);
     }
 
     // Close the modal
-    bootstrap.Modal.getInstance(document.getElementById("animalModal")).hide();
+    bootstrap.Modal.getInstance(modalElement).hide();
 });
 
 function editAnimal(tableId, animalName) {
