@@ -41,7 +41,7 @@ The code is organized using object-oriented principles:
 
 **Animal Class:**
 
-- Validates animal data (name length, size format)
+- Validates animal data (name length, size not equal to zero, location length)
 - Generates default images (if no image URL provided)
 
 **TableManager Class:**
