@@ -6,7 +6,7 @@ img {
 }
 
 img:hover {
-    transform: scale(2);
+    transform: scale(3);
     border-color: #007bff;
 }
 
@@ -20,4 +20,39 @@ img:hover {
 
 .blue {
     color: blue;
+}
+
+.sort-button {
+    /* No background for a minimal look */
+    background-color: transparent;
+    /* Remove default button border */
+    border: none;
+    /* A nice blue color for text */
+    color: #007bff;
+    /* Show a pointer on hover */
+    cursor: pointer;
+    /* Adjust the font size */
+    font-size: 14px;
+    /* Remove default padding */
+    padding: 0;
+    /* Add a little space between the text and the button */
+    margin-left: 5px;
+    /* Remove focus outline */
+    outline: none;
+}
+
+.sort-button:hover {
+    /* Add underline effect on hover */
+    text-decoration: underline;
+}
+
+.sort-button:active {
+    /* Darken color when clicked */
+    color: #0056b3;
+}
+
+.sort-button:focus {
+    /* Add focus outline for accessibility */
+    outline: 2px solid #80bdff;
+    outline-offset: 2px;
 }

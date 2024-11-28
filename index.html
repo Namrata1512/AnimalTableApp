@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,6 +8,7 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
   <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
   <div class="container mt-4">
     <h1 class="text-center mb-4">Animal Tables</h1>
@@ -14,15 +16,21 @@
     <div id="animal-tables">
       <!-- Table 1: Big Cats -->
       <div class="mb-4">
-        <h2>Big Cats</h2>
-        <button class="btn btn-primary mb-2" onclick="addAnimal('table1')">Add Animal</button>
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <h2>Big Cats</h2>
+          <button class="btn btn-primary" onclick="openAnimalModal('table1', 'add')"
+            title="Add a new animal to the Big Cats table">Add Animal</button>
+        </div>
         <table class="table table-bordered">
           <thead>
             <tr>
               <th>Image</th>
-              <th>Name <button onclick="sortTable('table1', 'name')">Sort</button></th>
-              <th>Size <button onclick="sortTable('table1', 'size')">Sort</button></th>
-              <th>Location <button onclick="sortTable('table1', 'location')">Sort</button></th>
+              <th>Name <button class="sort-button" onclick="sortTable('table1', 'name')"
+                  title="Sort Big Cats by Name">Sort</button></th>
+              <th>Size (ft) <button class="sort-button" onclick="sortTable('table1', 'size')"
+                  title="Sort Big Cats by Size">Sort</button></th>
+              <th>Location <button class="sort-button" onclick="sortTable('table1', 'location')"
+                  title="Sort Big Cats by Location">Sort</button></th>
               <th>Actions</th>
             </tr>
           </thead>
@@ -32,15 +40,20 @@
 
       <!-- Table 2: Dogs -->
       <div class="mb-4">
-        <h2>Dogs</h2>
-        <button class="btn btn-primary mb-2" onclick="addAnimal('table2')">Add Animal</button>
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <h2>Dogs</h2>
+          <button class="btn btn-primary mb-2" onclick="openAnimalModal('table2', 'add')"
+            title="Add a new animal to the Dogs table">Add Animal</button>
+        </div>
         <table class="table table-bordered">
           <thead>
             <tr>
               <th>Image</th>
-              <th>Name <button onclick="sortTable('table2', 'name')">Sort</button></th>
-              <th>Size</th>
-              <th>Location <button onclick="sortTable('table2', 'location')">Sort</button></th>
+              <th>Name <button class="sort-button" onclick="sortTable('table2', 'name')"
+                  title="Sort Dogs by Name">Sort</button></th>
+              <th>Size (ft)</th>
+              <th>Location <button class="sort-button" onclick="sortTable('table2', 'location')"
+                  title="Sort Dogs by Location">Sort</button></th>
               <th>Actions</th>
             </tr>
           </thead>
@@ -50,14 +63,18 @@
 
       <!-- Table 3: Big Fish -->
       <div>
-        <h2>Big Fish</h2>
-        <button class="btn btn-primary mb-2" onclick="addAnimal('table3')">Add Animal</button>
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <h2>Big Fish</h2>
+          <button class="btn btn-primary mb-2" onclick="openAnimalModal('table3', 'add')"
+            title="Add a new animal to the Big Fish table">Add Animal</button>
+        </div>
         <table class="table table-bordered">
           <thead>
             <tr>
               <th>Image</th>
               <th>Name</th>
-              <th>Size <button onclick="sortTable('table3', 'size')">Sort</button></th>
+              <th>Size (ft) <button class="sort-button" onclick="sortTable('table3', 'size')"
+                  title="Sort Big Fish by Size">Sort</button></th>
               <th>Location</th>
               <th>Actions</th>
             </tr>
@@ -68,6 +85,44 @@
     </div>
   </div>
 
+  <!-- Shared Modal -->
+  <div class="modal fade" id="animalModal" tabindex="-1" data-table-id="" data-operation="">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="animalModalTitle">Add/Edit Animal</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form id="animalForm">
+            <div class="mb-3">
+              <label class="form-label">Name</label>
+              <input type="text" class="form-control" id="animalName" required>
+              <div id="nameError" class="invalid-feedback"></div>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Size (ft)</label>
+              <input type="number" step="0.1" class="form-control" id="animalSize" required>
+              <div id="sizeError" class="invalid-feedback"></div>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Location</label>
+              <input type="text" class="form-control" id="animalLocation" required>
+              <div id="locationError" class="invalid-feedback"></div>
+            </div>
+            <div class="mb-3">
+              <label for="animalImage" class="form-label">Image (Optional)</label>
+              <input type="text" class="form-control" id="animalImage" name="image" placeholder="Image URL" />
+            </div>
+            <button type="submit" class="btn btn-primary">Save</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
   <script src="script.js"></script>
 </body>
+
 </html>
