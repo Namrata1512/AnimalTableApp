@@ -20,17 +20,17 @@ class TableManager {
 
     renderTable() {
         const tableBody = document.getElementById(this.tableId);
-        
+
         // Clear the table body before adding new rows
-        tableBody.innerHTML = ''; 
-    
+        tableBody.innerHTML = '';
+
         this.animals.forEach(animal => {
             const row = document.createElement('tr');
-            
+
             // Create image element with a random query parameter to avoid caching
             const imageSrc = `${animal.image}?v=${new Date().getTime()}`; // Adding timestamp to prevent caching
-            const imageCell = `<td><img src="${imageSrc}" alt="${animal.name}" width="50" height="50"></td>`;
-    
+            const imageCell = `<td><img class="zoomable" src="${imageSrc}" alt="${animal.name}"></td>`;
+
             // Construct the rest of the table row content
             const rowContent = `
                 ${imageCell}
@@ -44,11 +44,11 @@ class TableManager {
                         title="Delete Animal">Delete</button>
                 </td>
             `;
-    
+
             row.innerHTML = rowContent;
             tableBody.appendChild(row); // Append the new row to the table
         });
-    }    
+    }
 
     formatName(name) {
         if (this.tableId === 'table2') {
@@ -189,8 +189,6 @@ document.getElementById("animalForm").addEventListener("submit", function (event
     const size = document.getElementById("animalSize").value.trim();
     const location = document.getElementById("animalLocation").value.trim();
     const image = document.getElementById("animalImage").value.trim() || "default.jpg";
-    // Debugging: Check if the image input value is correct
-    console.log("Image from input: ", image);  // Check what image URL is being submitted
 
     let isValid = true;
 
@@ -198,6 +196,11 @@ document.getElementById("animalForm").addEventListener("submit", function (event
     if (!name || name.length < 3) {
         isValid = false;
         document.getElementById("nameError").textContent = "Name must be at least 3 characters long.";
+        document.getElementById("animalName").classList.add("is-invalid");
+    }
+    else if (/[\u{1F600}-\u{1F64F}]/gu.test(name)) {
+        isValid = false;
+        document.getElementById("nameError").textContent = "Name shouldn't include any emojis.";
         document.getElementById("animalName").classList.add("is-invalid");
     } else {
         document.getElementById("nameError").textContent = "";
@@ -218,6 +221,11 @@ document.getElementById("animalForm").addEventListener("submit", function (event
     if (!location) {
         isValid = false;
         document.getElementById("locationError").textContent = "Location is required.";
+        document.getElementById("animalLocation").classList.add("is-invalid");
+    }
+    else if (/[\u{1F600}-\u{1F64F}]/gu.test(name)) {
+        isValid = false;
+        document.getElementById("locationError").textContent = "Location shouldn't include any emojis.";
         document.getElementById("animalLocation").classList.add("is-invalid");
     } else {
         document.getElementById("locationError").textContent = "";

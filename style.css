@@ -3,10 +3,11 @@ img {
     height: 50px;
     border: 2px solid transparent;
     transition: transform 0.3s, border-color 0.3s;
+    display: flexbox center;
 }
 
 img:hover {
-    transform: scale(3);
+    transform: scale(5);
     border-color: #007bff;
 }
 
